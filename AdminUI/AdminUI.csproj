@@ -10,4 +10,8 @@
     <PackageReference Include="Font.Awesome" Version="5.15.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\scripts\" />
+  </ItemGroup>
+
 </Project>
