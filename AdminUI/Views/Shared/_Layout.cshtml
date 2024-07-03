@@ -41,24 +41,24 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">RESUMEN</div>
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
-                        </a><a class="nav-link" href="index.html">
+                        </a><a class="nav-link" asp-controller="Home" asp-action="Users">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             Usuarios
                         </a>
                         
                         <div class="sb-sidenav-menu-heading">MANTENIMIENTO</div>
-                        <a class="nav-link" href="charts.html">
+                        <a class="nav-link" asp-controller="Maintainer" asp-action="Categories">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Categorias
                         </a>
-                        <a class="nav-link" href="tables.html">
+                        <a class="nav-link" asp-controller="Maintainer" asp-action="Brands">
                             <div class="sb-nav-link-icon"><i class="fas fa-bookmark"></i></div>
                             Marcas
                         </a> 
-                        <a class="nav-link" href="tables.html">
+                        <a class="nav-link" asp-controller="Maintainer" asp-action="Products">
                             <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
                             Productos
                         </a>
