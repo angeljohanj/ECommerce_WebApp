@@ -1,19 +1,28 @@
-﻿using AdminUI.Models;
+﻿using AdminUI.Data;
+using AdminUI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace AdminUI.Controllers
 {
     public class HomeController : Controller
-    {      
-
+    {
+        public UsersData usersData = new UsersData();
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Users()
+
+        public async Task<IActionResult> Users()
         {
-            return View();
+            var users = await usersData.ListUsers();
+            if (ModelState.IsValid)
+            {
+                return View(users);
+            }
+
+            return RedirectToAction("Error");
+            
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
