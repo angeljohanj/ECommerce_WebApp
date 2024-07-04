@@ -62,10 +62,6 @@
       <Project>{5e0b34d0-0305-4cc5-9374-b82f5143518b}</Project>
       <Name>AdminUI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj">
-      <Project>{059dc296-7474-4e50-a061-8134013ef47b}</Project>
-      <Name>BusinessLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

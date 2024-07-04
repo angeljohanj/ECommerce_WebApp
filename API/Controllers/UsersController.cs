@@ -70,7 +70,8 @@ namespace API.Controllers
       @Email,
       @Password)
  end*/
-        
+        [HttpGet]
+        [Route("/")]
         public JsonResult ListUsers()
         {
             var users = new List<UsersModel>();
@@ -93,9 +94,13 @@ namespace API.Controllers
                                     LastName = dReader["Lastname"].ToString(),
                                     Email = dReader["Email"].ToString(),
                                     Password = dReader["Password"].ToString(),
+                                    RestoreUser = Convert.ToBoolean(dReader["RestoreUser"]),
+                                    Active = Convert.ToBoolean(dReader["Active"])
                                 });
                             };
+                            dReader.Close();
                         }
+                        conn.Close();
                     }
                 }
             }
