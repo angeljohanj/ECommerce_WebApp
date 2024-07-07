@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.ComponentModel;
 using API.Model;
+using System;
 
 
 namespace API.Controllers
@@ -20,18 +21,19 @@ namespace API.Controllers
 
        public DataConnection connection = new DataConnection();
 
-        /*public string[] procedures = new string[]
+        public string[] parameters = new string[]
         {
-            "sp_ListUsers"
-        };*/
-        /* create procedure sp_ListUsers
- as
- begin
+            "Id"
+        };
 
-     select* from tb_Users where active = 1;
-     end
+        public string[] procedures = new string[]
+        {
+            "sp_ListUsers", "sp_GetAUser"
+        };
 
- create procedure sp_GetAUser(@Id int)
+        
+
+ /*create procedure sp_GetAUser(@Id int)
  as
  begin
  select* from tb_Users where Active = 1 and UsersId = @Id
@@ -111,7 +113,43 @@ namespace API.Controllers
 
             return new JsonResult(users);
         }
-        
-        
+
+        [HttpGet][Route("/GetAUser")]
+        public JsonResult GetAUser(int id)
+        {
+            var user = new UsersModel();
+            try
+            {
+                using(var conn = new SqlConnection(connection.GetConnectionString()))
+                {
+                    using(var cmd = new SqlCommand(procedures[1], conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        conn.Open();
+                        cmd.Parameters.AddWithValue(parameters[0], id);
+                        using(var dReader = cmd.ExecuteReader())
+                        {
+                            while (dReader.Read())
+                            {
+                                user.UsersId = Convert.ToInt32(dReader["UsersId"]);
+                                user.Name = dReader["Name"].ToString();
+                                user.LastName = dReader["Lastname"].ToString();
+                                user.Email = dReader["Email"].ToString();
+                                user.Password = dReader["Password"].ToString();
+                                user.RestoreUser = Convert.ToBoolean(dReader["RestoreUser"]);
+                                user.Active = Convert.ToBoolean(dReader["Active"]);
+                            }
+                            dReader.Close();
+                        }
+                       conn.Close();
+                    }
+                }
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return new JsonResult(user);
+        }
     }
 }

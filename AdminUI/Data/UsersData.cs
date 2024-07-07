@@ -30,5 +30,27 @@ namespace AdminUI.Data
             }
             return users;
         }
+
+        public async Task<UsersModel> GetAUser(int id)
+        {
+            var user = new UsersModel();
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, BaseUrl + $"?id={id}");
+                var result = await client.SendAsync(request);
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var response = await result.Content.ReadAsStringAsync();
+                    user = JsonConvert.DeserializeObject<UsersModel>(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+            }
+            return user;
+        }
     }
 }
