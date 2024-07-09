@@ -1,6 +1,7 @@
 ﻿using AdminUI.Models;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace AdminUI.Data
 {
@@ -51,6 +52,37 @@ namespace AdminUI.Data
                 await Console.Out.WriteLineAsync(ex.Message);
             }
             return user;
+        }
+
+        public async Task<bool> RegisterNewUser(UsersModel newUser)
+        {
+            var ans = false;
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                var data = JsonConvert.SerializeObject(newUser);
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, BaseUrl + "/RegisterNewUser");
+                request.Content = new StringContent(data, Encoding.UTF8, MediaType);
+                var result = await client.SendAsync(request);
+
+                if(result.IsSuccessStatusCode)
+                {
+                    var response = await result.Content.ReadAsStringAsync();
+
+                    if (response == "true")
+                    {
+                        ans = true;
+                    }
+                }
+
+            }catch(Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                ans = false;
+            }
+
+            return ans;
         }
     }
 }
