@@ -23,34 +23,14 @@ namespace API.Controllers
 
         public string[] parameters = new string[]
         {
-            "Id"
+            "Id", "Name", "LastName", "Email", "Password"
         };
 
         public string[] procedures = new string[]
         {
-            "sp_ListUsers", "sp_GetAUser"
-        };
-
-        
-
- /*create procedure sp_GetAUser(@Id int)
- as
- begin
- select* from tb_Users where Active = 1 and UsersId = @Id
- end
-
- create table tb_Users(
- UsersId int primary key identity,
- Name varchar(100),
- LastName varchar(100), 
- Email varchar(100), 
- Password varchar(150),
- RestoreUser bit default 0,
- Edited_at datetime,
- Deleted_at datetime,
- Active bit default 1, 
- Registered_at datetime default getdate())
-
+            "sp_ListUsers", "sp_GetAUser", "sp_RegisNewUser"
+        };        
+/*
 
  create procedure sp_RegisNewUser
  (@Name varchar(100),
@@ -150,6 +130,43 @@ namespace API.Controllers
             }
 
             return new JsonResult(user);
+        }
+
+
+        [HttpPost][Route("/RegisterNewUser")]
+
+        public JsonResult RegisterNewUser(UsersModel newUser)
+        {
+            var ans = false;
+
+            try
+            {
+                using(var conn = new SqlConnection(connection.GetConnectionString()))
+                {
+                    using(var cmd = new SqlCommand(procedures[2], conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        conn.Open();
+                        cmd.Parameters.AddWithValue(parameters[1], newUser.Name);
+                        cmd.Parameters.AddWithValue(parameters[2], newUser.LastName);
+                        cmd.Parameters.AddWithValue(parameters[3], newUser.Email);
+                        cmd.Parameters.AddWithValue(parameters[4], newUser.Password);
+                        var affectedRows=cmd.ExecuteNonQuery();
+
+                        if(affectedRows != 0)
+                        {
+                            ans = true;
+                        }
+                        conn.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ans = false;
+            }
+            return new JsonResult(ans);
         }
     }
 }
