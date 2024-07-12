@@ -20,34 +20,64 @@
             </div>
         </div>
         <hr />
-        <table class="table" style="width:100%">
+        <table class="display cell-border" id="table" style="width:100%">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
                     <th scope="col">Correo</th>
+                    <th scope="col">Activo</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach(var i in Model)
-                {
-                    <tr>
-                        <td>@i.UsersId</td>
-                        <td>@i.Name</td>
-                        <td>@i.LastName</td>
-                        <td>@i.Email</td>
-                        <td>
-                            <a class="btn btn-warning">Editar</a>
-                            <a class="btn btn-danger">Borrar</a>
-                        </td>
-                    </tr>
-                }
 
             </tbody>
         </table>
 
     </div>
 </div>
+
+@section scripts {
+    <script>
+        var tableData;
+
+        jQuery.ajax({
+            url: '@Url.Action("ListUsers", "Home")',
+            type: "GET",
+            dataType: "json",
+            contentType:"application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data);
+            }
+        })
+
+        tableData = $('#table').DataTable({
+            responsive: true,
+            ordering: false,
+            "ajax": {
+                url: '@Url.Action("ListUsers", "Home")',
+                type: "GET",
+                dataType: "json"
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "lastName" },
+                { "data": "email" },
+                {
+                    "data": "active", "render": (value) => {
+                        if (value) {
+                            return '<span class="badge bg-success">Sí</span>';
+                        } else {
+                            return '<span class="badge bg-danger">No</span>';
+                        }
+                    }
+                }, {
+                    "defaultContent": '<a class="btn btn-sm btn-warning" asp-controller="" asp-action=""><i class="fas fa-pen"></i></a>'+
+                        '<a class="btn btn-sm btn-danger ms-2" asp-controller="" asp-action=""><i class="fas fa-trash"></i></a>'
+                }
+            ] 
+                });
+    </script>
+}
 

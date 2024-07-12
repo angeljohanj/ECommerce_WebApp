@@ -13,19 +13,32 @@ namespace AdminUI.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Users()
+        public IActionResult Users()
         {
-            var users = await usersData.ListUsers();
-            if (ModelState.IsValid)
-            {
-                return View(users);
-            }
-
-            return RedirectToAction("Error");
+            return View();
             
         }
 
-               
+        [HttpGet]
+
+        public async Task<JsonResult> ListUsers()
+        {
+            var users =await usersData.ListUsers();
+
+            return Json(new {data=users});
+        }
+
+        public IActionResult RegisterNewUser()
+        {
+            return View();
+        }
+        [HttpPost]
+        /*public IActionResult RegisterNewUser()
+        {
+            return View();
+        }*/
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
