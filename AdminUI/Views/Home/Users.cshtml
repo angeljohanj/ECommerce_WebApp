@@ -16,7 +16,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <button class="btn btn-success">Agregar nuevo usuario</button>
+                <button class="btn btn-success" onclick="OpenNewUserModal()">Agregar nuevo usuario</button>
             </div>
         </div>
         <hr />
@@ -38,19 +38,43 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="NewUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @* Form starts here *@
+                <form method="post" action="@Url.Action("RegisterNewUser","Home")">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="NewUserName" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     <script>
         var tableData;
-
-        jQuery.ajax({
-            url: '@Url.Action("ListUsers", "Home")',
-            type: "GET",
-            dataType: "json",
-            contentType:"application/json; charset=utf-8",
-            success: function (data) {
-                console.log(data);
-            }
-        })
 
         tableData = $('#table').DataTable({
             responsive: true,
@@ -74,10 +98,21 @@
                     }
                 }, {
                     "defaultContent": '<a class="btn btn-sm btn-warning" asp-controller="" asp-action=""><i class="fas fa-pen"></i></a>'+
-                        '<a class="btn btn-sm btn-danger ms-2" asp-controller="" asp-action=""><i class="fas fa-trash"></i></a>'
+                        '<a class="btn btn-sm btn-danger ms-2" asp-controller="" asp-action=""><i class="fas fa-trash"></i></a>',
+                             "orderable": false,
+                             "searchable":false,
+                             "width":"90px"
                 }
-            ] 
+            ],
+            "language": { 
+                "url": "https://cdn.datatables.net/plug-ins/2.0.8/i18n/es-MX.json" 
+            }
                 });
+
+        function OpenNewUserModal(){
+            $('#NewUserModal').modal("show");
+
+        }
     </script>
 }
 
