@@ -30,28 +30,7 @@ namespace API.Controllers
         {
             "sp_ListUsers", "sp_GetAUser", "sp_RegisNewUser"
         };        
-/*
 
- create procedure sp_RegisNewUser
- (@Name varchar(100),
- @LastName varchar(100), 
- @Email varchar(100), 
- @Password varchar(150))
- as
- begin
-     insert into tb_Users
-     (Name,
-     LastName,
-     Email,
-     Password)
-
-
-     values
-     (@Name,
-      @LastName,
-      @Email,
-      @Password)
- end*/
         [HttpGet]
         [Route("/")]
         public JsonResult ListUsers()
