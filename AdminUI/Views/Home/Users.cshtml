@@ -16,7 +16,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <button class="btn btn-success" onclick="OpenNewUserModal()">Agregar nuevo usuario</button>
+                <button class="btn btn-success" onclick="OpenUserModal(null)">Agregar nuevo usuario</button>
             </div>
         </div>
         <hr />
@@ -39,34 +39,47 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="NewUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="NewUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="exampleModalLabel">Usuarios</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 @* Form starts here *@
-                <form method="post" action="@Url.Action("RegisterNewUser","Home")">
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="NewUserName" aria-describedby="emailHelp">
+                
+                     <input hidden id="UserId" value=0/>
+
+                    <div class="row">
+                    <div class="mb-3 col-sm-6">
+                        <label for="NewUserName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="NewUserName">
                     </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                    <div class="mb-3 col-sm-6">
+                        <label for="newUserLastname" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="NewUserLastname">
                     </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    <div class="mb-3 col-sm-6">
+                        <label for="newUserEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="NewUserEmail">
+                    </div> 
+
+                    <div class="col-sm-6">
+                    <label for="isActive" class="form-label">Activo</label>
+                    <select id="isActive">
+
+                        <option value=1>Sí</option>
+                        <option value=0>No</option>
+                    </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                    </div>
+                
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar
+                </button>
+                <button type="button" class="btn btn-primary">Guardar</button>
             </div>
         </div>
     </div>
@@ -97,7 +110,7 @@
                         }
                     }
                 }, {
-                    "defaultContent": '<a class="btn btn-sm btn-warning" asp-controller="" asp-action=""><i class="fas fa-pen"></i></a>'+
+                    "defaultContent": '<a class="btn btn-sm btn-warning btn-edit"><i class="fas fa-pen"></i></a>'+
                         '<a class="btn btn-sm btn-danger ms-2" asp-controller="" asp-action=""><i class="fas fa-trash"></i></a>',
                              "orderable": false,
                              "searchable":false,
@@ -109,9 +122,41 @@
             }
                 });
 
-        function OpenNewUserModal(){
-            $('#NewUserModal').modal("show");
+        function OpenUserModal(json){
+                $('#NewUserName').val("");
+                $('#NewUserLastname').val("");
+                $('#NewUserEmail').val("");
+                $('#isActive').val(0);
 
+            if (json != null) {
+                $('#NewUserName').val(json.name);
+                $('#NewUserLastname').val(json.lastName);
+                $('#NewUserEmail').val(json.email);
+                    $('#isActive').val(json.active == true ? 1 : 0);
+            }
+                
+                $('#NewUserModal').modal("show");           
+
+        }
+
+        $('#table tbody').on('click', '.btn-edit', function () {
+            
+            var selectedRow = $(this).closest('tr');
+
+            var data = tableData.row(selectedRow).data();
+
+            console.log(data);
+            OpenUserModal(data);
+        });
+
+        function SaveUser() {
+                var userData = {
+                    active: $('#isActive').val() == 1 ? true : false,
+                    email: $('#NewUserEmail').val(),
+                    lastName: $('#NewUserLastname').val(),
+                    name: $('#NewUserName').val(""),
+                    usersId: $("#UserId").val()
+                    }
         }
     </script>
 }

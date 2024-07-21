@@ -32,12 +32,7 @@ namespace AdminUI.Controllers
         {
             return View();
         }
-        [HttpPost]
-        /*public IActionResult RegisterNewUser()
-        {
-            return View();
-        }*/
-
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
